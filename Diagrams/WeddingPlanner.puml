@@ -1,0 +1,317 @@
+@startuml
+hide circle
+top to bottom direction
+
+!define ENTITY(entityName) class entityName << Entity >>
+!define AGGREGATE(aggregateName) class aggregateName << Aggregate >>
+!define AGGREGATE_ROOT(aggregateRootName) class aggregateRootName << Aggregate Root >>
+!define AGGREGATE_ROOT_ENTITY(aggregateRootEntityName) class aggregateRootEntityName << Aggregate Root >> << Entity >>
+!define VALUE_OBJECT(valueObjectName) class valueObjectName << Value Object >>
+!pragma useVerticalIf on
+skinparam packageStyle rectangle
+skinparam rectangle {
+    BackgroundColor #f7f4eb
+    BorderColor Black
+}
+
+rectangle "Wedding Planner" as BoundedContextWedding #line.dashed {
+
+    Package "Husband Management Sub-Domain" <<Rectangle>> #Lavender {
+
+        AGGREGATE(Husband) #lightpink {
+            name: String
+            age: Integer
+        }
+
+        VALUE_OBJECT(Suit) #Bisque {
+            brand: String
+            size: String
+            color: String
+            style: String
+            price: Price
+            status: AvailabilityStatus
+        }
+
+        class RelationshipStatus << Enumerator >> {
+              + NOT_MARRIED
+              + MARRIED
+        }
+
+        VALUE_OBJECT(Price) #Bisque{
+             value: BigDecimal
+             currency: Currency
+        }
+
+        class Currency << Enumerator >> {
+              + USD
+              + EUR
+              + GBP
+              + JPY
+              + AUD
+              + CAD
+        }
+
+        class AvailabilityStatus << Enumerator >> {
+              + READY
+              + SHIPPING
+              + NOT_AVAILABLE
+        }
+
+        VALUE_OBJECT(HusbandIdentifier) #Bisque{
+            husbandId: UUID
+        }
+
+        Husband --> RelationshipStatus
+        Husband o--"1" Suit
+        Price --> Currency
+        Suit o--"1" Price
+        Suit --> AvailabilityStatus
+        Husband o--"1" HusbandIdentifier
+
+    }
+
+
+    Package "Wife Management Sub-Domain" <<Rectangle>> #3399FF{
+
+        AGGREGATE(Wife) #lightpink {
+                name: String
+                age: Integer
+            }
+
+        VALUE_OBJECT(WeddingDress) #Bisque {
+            designer: String
+            size: String
+            color: String
+            style: String
+            price: Price
+            status: AvailabilityStatus
+        }
+
+        class RelationshipStatus << Enumerator >> {
+             + NOT_MARRIED
+             + MARRIED
+        }
+
+        VALUE_OBJECT(Price) #Bisque{
+             value: BigDecimal
+             currency: Currency
+        }
+
+        class Currency << Enumerator >> {
+             + USD
+             + EUR
+             + GBP
+             + JPY
+             + AUD
+             + CAD
+        }
+
+        class AvailabilityStatus << Enumerator >> {
+             + READY
+             + SHIPPING
+             + NOT_AVAILABLE
+        }
+
+        VALUE_OBJECT(WifeIdentifier) #Bisque{
+            wifeId: UUID
+        }
+
+        Wife --> RelationshipStatus
+        Wife o--"1" WeddingDress
+        Price --> Currency
+        WeddingDress o--"1" Price
+        WeddingDress --> AvailabilityStatus
+        Wife o--"1" WifeIdentifier
+    }
+
+    Package "Wedding Management Sub-Domain" <<Rectangle>> #FFCDD2{
+
+        note "Invariant: [Venue changed Wife and\n Husband's Status after marriage\nOn Venue Status = DONE]" as VenueInvariant1
+
+        AGGREGATE_ROOT_ENTITY(Venue) #lightPink {
+            name: String
+            capacity: Integer
+            cuisinePick: String
+            theme: String
+            price: Price
+            status: Status
+        }
+
+        VALUE_OBJECT(Staff) #Bisque {
+            staffName: String
+            qualityOfStaff: QualityOfStaff
+            typeOfStaff: TypeOfStaff
+        }
+
+        VALUE_OBJECT(Address) #Bisque{
+            street: String
+            city: String
+            province: String
+            country: String
+        }
+
+        class QualityOfStaff << Enumerator >> {
+            + LOW
+            + MEDIUM
+            + HIGH
+        }
+
+        class TypeOfStaff << Enumerator >> {
+            + PASTOR
+            + WAITER
+            + CHEF
+            + BARTENDER
+            + SECURITY
+            + MANAGER
+            + OTHER
+        }
+
+        class Status << Enumerator >> {
+            + DONE
+            + READY
+            + NEED_CLEANING
+            + NEED_SETTING_UP
+            + NOT_AVAILABLE
+        }
+
+        VALUE_OBJECT(Price) #Bisque{
+             value: BigDecimal
+             currency: Currency
+        }
+
+        class Currency << Enumerator >> {
+              + USD
+              + EUR
+              + GBP
+              + JPY
+              + AUD
+              + CAD
+        }
+
+        VALUE_OBJECT(VenueIdentifier) #Bisque{
+            venueId: UUID
+        }
+
+
+        Staff --> QualityOfStaff
+        Staff --> TypeOfStaff
+        Venue o-- "0.*" Staff
+        Venue o-- "1" Address
+        Venue --> Status
+        Price --> Currency
+        Venue o-- "1" Price
+        Venue o-- "1" VenueIdentifier
+
+
+
+    }
+
+    Package "Accessory Management Sub-Domain" <<Rectangle>> #LightSalmon {
+
+        ENTITY(Ring) #lightblue {
+            material: String
+            gemstone: String
+            size: String
+            price: Price
+            status: AvailabilityStatus
+        }
+
+        ENTITY(Decoration) #lightblue {
+            name: String
+            description: String
+            price: Price
+        }
+
+        VALUE_OBJECT(Price) #Bisque{
+             value: BigDecimal
+             currency: Currency
+        }
+
+        class Currency << Enumerator >> {
+             + USD
+             + EUR
+             + GBP
+             + JPY
+             + AUD
+             + CAD
+        }
+
+        VALUE_OBJECT(DecorationIdentifier) #Bisque{
+            decorationId: UUID
+        }
+
+        VALUE_OBJECT(RingIdentifier) #Bisque{
+            ringId: UUID
+        }
+
+        class AvailabilityStatus << Enumerator >> {
+             + READY
+             + SHIPPING
+             + NOT_AVAILABLE
+        }
+
+        Price --> Currency
+        Decoration o-- "1" Price
+        Ring o-- "1" Price
+        Decoration o--"1" DecorationIdentifier
+        Ring o--"1" RingIdentifier
+        Ring --> AvailabilityStatus
+
+    }
+
+    Package "Payment management Sub-Domain" <<Rectangle>> #grey {
+
+        note "Info: [Payment is not being made\n in this program, it is just to\n show what it could look\n like with a sale class]" as SaleInfo
+
+        AGGREGATE(PaymentMethod) #lightPink {
+            date: DateTime
+            status: String
+            FinancingAgreement: FinancingAgreement
+        }
+
+        VALUE_OBJECT(FinancingAgreement) #Bisque{
+            numMonths: Integer
+            monthlyPayment: Price
+            downPayment: Price
+            warrantyDetails: String
+        }
+
+        VALUE_OBJECT(PaymentMethodIdentifier) #Bisque{
+                paymentMethodId: UUID
+        }
+
+        VALUE_OBJECT(Price) #Bisque{
+            value: BigDecimal
+            currency: Currency
+        }
+
+        class Currency << Enumerator >> {
+            + USD
+            + EUR
+            + GBP
+            + JPY
+            + AUD
+            + CAD
+        }
+
+        PaymentMethod o-- "1" FinancingAgreement
+        Price --> Currency
+        FinancingAgreement o-- "1" Price
+        PaymentMethod o-- "1" PaymentMethodIdentifier
+
+    }
+
+    Husband --> WifeIdentifier
+    Husband --> RingIdentifier
+    Wife --> HusbandIdentifier
+    Wife --> RingIdentifier
+    Venue o-- "1" DecorationIdentifier
+    Venue o-- "1" WifeIdentifier
+    Venue o-- "1" HusbandIdentifier
+    PaymentMethod o-- "1" VenueIdentifier
+
+    note "I have made a wedding management\nsystem for wedding planners, I have\nmade seperated husband and wife as they\nmight need different things added on later\n as well as we relate a husband to a wife\nso you can find the wife with only the\nhusband and vice-versa. My aggregate root\nis my venue in the wedding management\nsub-domain as it takes care of the marriage\nas a whole and needs parts of every other\nsubdomains to organise the wedding event.\nI have added a payment subdomain as it is\nnecessary, however I have not made it in\ncode yet." as Explanation
+
+}
+
+@enduml

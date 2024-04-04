@@ -1,0 +1,13 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Context.puml
+
+title System Context Diagram for Wedding Planner System
+Person(employee, "Employee", "Wedding planner")
+Person(customer, "Customer", "Soon to be married couple")
+System(weddingplanner, "Wedding Planner System", "Allows wedding planners to manage weddings")
+
+Rel(employee, weddingplanner, "Tracks and modifies wedding planning", "Uses")
+Rel(customer, weddingplanner, "Tracks wedding planning", "Uses")
+
+'SHOW_LEGEND()
+@enduml
