@@ -22,7 +22,7 @@ class CustomerRepositoryIntegrationTest {
     public void setUpDb() { clientRepository.deleteAll(); }
 
     @Test
-    public void whenHusbandExists_ReturnHusbandByHusbandId(){
+    public void whenClientExists_ReturnClientByClientId(){
         //arrange
         Client client1;
         client1 = new Client(new Contact("xilef992@gmail.com","555555555") ,new ClientIdentifier(),
@@ -36,7 +36,6 @@ class CustomerRepositoryIntegrationTest {
 
         //assert
         assertNotNull(client1Found);
-        assertEquals(client1Found.getClientIdentifier(), client1.getClientIdentifier());
         assertEquals(client1Found.getContact(), client1.getContact());
         assertEquals(client1Found.getClientIdentifier(), client1.getClientIdentifier());
         assertEquals(client1Found.getAddress(), client1.getAddress());

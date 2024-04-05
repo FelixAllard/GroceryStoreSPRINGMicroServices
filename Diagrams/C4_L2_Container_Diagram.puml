@@ -17,14 +17,14 @@ LAYOUT_TOP_DOWN()
 SHOW_PERSON_OUTLINE()
 'HIDE_STEREOTYPE()
 
-title Container Diagram for Wedding Planner System
+title Container Diagram for Grocery Store System
 
 Person(employee, "Employee", "Wedding planner")
-System_Boundary(weddingplanner, "Wedding Planner System") {
-    Container(webapp, "Web Application", "JavaScript, React", "Delivers the static content and the wedding planner single page application.")
-    Container(singlepage_app, "Single-Page Application", "Javascript, React", "Provides the wedding planner functionality to employees via their browser.")
-    Container(api_gateway, "API-Gateway", "Java, Spring Boot", "Provides wedding planner functionality via a JSON/REST HTTPS API.")
-    Container(wedding_service, "wedding-service", "Java, Spring Boot", "Provides wedding functionality using the aggregator pattern via a JSON/REST HTTPS API.", $tags = "microService")
+System_Boundary(weddingplanner, "Grocery Store System") {
+    Container(webapp, "Web Application", "JavaScript, React", "Show the information of the grocery store in single page application")
+    Container(singlepage_app, "Single-Page Application", "Javascript, React", "You can access the application through your browser as long as it supports later version javascript")
+    Container(api_gateway, "API-Gateway", "Java, Spring Boot", "Provides grocery store functionality via a JSON/REST HTTPS API.")
+    Container(wedding_service, "Transaction services", "Java, Spring Boot", "Provides wedding functionality using the aggregator pattern via a JSON/REST HTTPS API.", $tags = "microService")
     Container(wives_service, "wives-service", "Java, Spring Boot", "Provides wives functionality via a JSON/REST HTTPS API.", $tags = "microService")
     Container(husbands_service, "husbands-service", "Java, Spring Boot", "Provides husbands functionality via a JSON/REST HTTPS API.", $tags = "microService")
     Container(accessory_service, "accessory-service", "Java, Spring Boot", "Provides accessory functionality via a JSON/REST HTTPS API.", $tags = "microService")
@@ -37,8 +37,8 @@ System_Boundary(weddingplanner, "Wedding Planner System") {
     Container(payment_db, "Payment DB", "Postgres latest version", "Stores accessory information.", $tags = "unusedStorage")
 
 
-    Rel(employee, webapp, "Visits weddingplanner.com using", "HTTPS")
-    Rel_R(webapp, singlepage_app, "Delivers to the employee's browser")
+    Rel(employee, webapp, "Visits http://IPADDRESS:8080 using", "HTTP")
+    Rel_R(webapp, singlepage_app, "Show the page on the employee's browser")
     Rel(employee, singlepage_app, "views tracks wedding using", "HTTPS")
     Rel(singlepage_app, api_gateway, "Makes API calls to", "JSON/REST/HTTPS")
     Rel(api_gateway, wives_service, "Makes API calls to", "JSON/REST/HTTPS")

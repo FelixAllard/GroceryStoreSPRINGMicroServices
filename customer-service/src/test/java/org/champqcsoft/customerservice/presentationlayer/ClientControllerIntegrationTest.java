@@ -2,6 +2,7 @@ package org.champqcsoft.customerservice.presentationlayer;
 
 import org.champqcsoft.customerservice.commons.enums.Currency;
 import org.champqcsoft.customerservice.dataaccesslayer.ClientRepository;
+import org.champqcsoft.customerservice.dataaccesslayer.MembershipStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,9 +20,9 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class ClientControllerIntegrationTest {
 
-    private final String BASE_URI_CLIENTS = "/api/v1/clientss";
-    private final String FOUND_CLIENT_ID = "b84478d2-937a-4388-b075-1855406990a7";
-    private final String FOUND_CLIENT_FIRST_NAME = "Henry";
+    private final String BASE_URI_CLIENTS = "api/v1/clients";
+    private final String FOUND_CLIENT_ID = "a5aded7b-71a9-45bc-b218-1b8ef7dd006c";
+    private final String FOUND_CLIENT_FIRST_NAME = "Felix";
     private final String NOT_FOUND_CLIENT_ID = "c3333333-3333-3333-444444444444";
     private final String INVALID_CLIENT_ID = "c3333333-3333-3333";
 
@@ -66,9 +67,21 @@ class ClientControllerIntegrationTest {
         //arrange
         long sizeDB = clientRepository.count();
 
-        ClientRequestModel clientRequestModel = new ClientRequestModel(FOUND_CLIENT_ID, "Justin", 18, new WifeIdentifier().getWifeId(),
-                new RingIdentifier().getRingId(), "Gucci", "20", "Red", "Street",
-                new BigDecimal("250"), Currency.CAD, "READY", "NOT_MARRIED");
+        ClientRequestModel clientRequestModel = new ClientRequestModel(FOUND_CLIENT_ID,
+                "Felix",
+                "xilef992@gmail.com",
+                "5555555555",
+                "LouisHemon",
+                "Montreal",
+                "Alberta",
+                "12313",
+                "Quebec",
+                69.69,
+                69,
+                MembershipStatus.Active.name(),
+                69.69,
+                Currency.CAD.name()
+        );
 
         webTestClient.post()
                 .uri(BASE_URI_CLIENTS)
@@ -80,18 +93,19 @@ class ClientControllerIntegrationTest {
                 .expectBody(ClientResponseModel.class)
                 .value((customerResponseModel) -> {
                     assertNotNull(customerResponseModel);
-                    assertEquals(clientRequestModel.getAge(), customerResponseModel.getAge());
-                    assertEquals(clientRequestModel.getRingId(), customerResponseModel.getRingId());
-                    assertEquals(clientRequestModel.getWifeId(), customerResponseModel.getWifeId());
-                    assertEquals(clientRequestModel.getAvailabilityStatus(), customerResponseModel.getAvailabilityStatus());
                     assertEquals(clientRequestModel.getName(), customerResponseModel.getName());
-                    assertEquals(clientRequestModel.getDesigner(), customerResponseModel.getDesigner());
-                    assertEquals(clientRequestModel.getSize(), customerResponseModel.getSize());
-                    assertEquals(clientRequestModel.getColor(), customerResponseModel.getColor());
-                    assertEquals(clientRequestModel.getStyle(), customerResponseModel.getStyle());
+                    assertEquals(clientRequestModel.getEmail(), customerResponseModel.getEmail());
+                    assertEquals(clientRequestModel.getPhone(), customerResponseModel.getPhone());
+                    assertEquals(clientRequestModel.getStreet(), customerResponseModel.getStreet());
+                    assertEquals(clientRequestModel.getCity(), customerResponseModel.getCity());
+                    assertEquals(clientRequestModel.getState(), customerResponseModel.getState());
+                    assertEquals(clientRequestModel.getPostalCode(), customerResponseModel.getPostalCode());
+                    assertEquals(clientRequestModel.getCountry(), customerResponseModel.getCountry());
+                    assertEquals(clientRequestModel.getTotalSpent(), customerResponseModel.getTotalSpent());
+                    assertEquals(clientRequestModel.getNumberOfPoints(), customerResponseModel.getNumberOfPoints());
+                    assertEquals(clientRequestModel.getMembershipStatus(), customerResponseModel.getMembershipStatus());
                     assertEquals(clientRequestModel.getValue(), customerResponseModel.getValue());
                     assertEquals(clientRequestModel.getCurrency(), customerResponseModel.getCurrency());
-                    assertEquals(clientRequestModel.getRelationshipStatus(), customerResponseModel.getRelationshipStatus());
                 });
 
         long sizeDBAfter = clientRepository.count();
@@ -101,9 +115,20 @@ class ClientControllerIntegrationTest {
     @Test
     public void whenUpdateClient_thenReturnUpdatedClient() {
         // Arrange
-        ClientRequestModel clientToUpdate = new ClientRequestModel(FOUND_CLIENT_ID, "UpdatedName", 25, "updatedWifeId",
-                "updatedRingId", "UpdatedDesigner", "15", "Blue", "UpdatedStyle",
-                new BigDecimal("500"), Currency.USD, "READY", "MARRIED");
+        ClientRequestModel clientToUpdate = new ClientRequestModel(FOUND_CLIENT_ID,
+                "Felix",
+                "xilef992@gmail.com",
+                "5555555555",
+                "LouisHemon",
+                "Montreal",
+                "Alberta",
+                "12313",
+                "Quebec",
+                69.69,
+                69,
+                MembershipStatus.Active.name(),
+                69.69,
+                Currency.CAD.name());
 
 
         // Act & Assert
@@ -118,17 +143,18 @@ class ClientControllerIntegrationTest {
                 .value((updatedClient) -> {
                     assertNotNull(updatedClient);
                     assertEquals(clientToUpdate.getName(), updatedClient.getName());
-                    assertEquals(clientToUpdate.getAge(), updatedClient.getAge());
-                    assertEquals(clientToUpdate.getRingId(), updatedClient.getRingId());
-                    assertEquals(clientToUpdate.getWifeId(), updatedClient.getWifeId());
-                    assertEquals(clientToUpdate.getAvailabilityStatus(), updatedClient.getAvailabilityStatus());
-                    assertEquals(clientToUpdate.getDesigner(), updatedClient.getDesigner());
-                    assertEquals(clientToUpdate.getSize(), updatedClient.getSize());
-                    assertEquals(clientToUpdate.getColor(), updatedClient.getColor());
-                    assertEquals(clientToUpdate.getStyle(), updatedClient.getStyle());
+                    assertEquals(clientToUpdate.getEmail(), updatedClient.getEmail());
+                    assertEquals(clientToUpdate.getPhone(), updatedClient.getPhone());
+                    assertEquals(clientToUpdate.getStreet(), updatedClient.getStreet());
+                    assertEquals(clientToUpdate.getCity(), updatedClient.getCity());
+                    assertEquals(clientToUpdate.getState(), updatedClient.getState());
+                    assertEquals(clientToUpdate.getPostalCode(), updatedClient.getPostalCode());
+                    assertEquals(clientToUpdate.getCountry(), updatedClient.getCountry());
+                    assertEquals(clientToUpdate.getTotalSpent(), updatedClient.getTotalSpent());
+                    assertEquals(clientToUpdate.getNumberOfPoints(), updatedClient.getNumberOfPoints());
+                    assertEquals(clientToUpdate.getMembershipStatus(), updatedClient.getMembershipStatus());
                     assertEquals(clientToUpdate.getValue(), updatedClient.getValue());
                     assertEquals(clientToUpdate.getCurrency(), updatedClient.getCurrency());
-                    assertEquals(clientToUpdate.getRelationshipStatus(), updatedClient.getRelationshipStatus());
                 });
     }
 
@@ -136,9 +162,20 @@ class ClientControllerIntegrationTest {
     public void whenUpdateNonExistentClient_thenThrowNotFoundException() {
         // Arrange
         String nonExistentClientId = "nonExistentId";
-        ClientRequestModel updatedClient = new ClientRequestModel(nonExistentClientId, "UpdatedName", 25, "updatedWifeId",
-                "updatedRingId", "UpdatedDesigner", "15", "Blue", "UpdatedStyle",
-                new BigDecimal("500"), Currency.USD, "READY", "MARRIED");
+        ClientRequestModel updatedClient = new ClientRequestModel(nonExistentClientId, "UpdateName",
+                "UpdateEmail",
+                "updatePhone",
+                "upateStreet",
+                "UpdateCity",
+                "UpdateState",
+                "UpdatePostalCode",
+                "UpdateCountry",
+                69.69,
+                69,
+                MembershipStatus.Closed.name(),
+                69.69,
+                Currency.CAD.name()
+        );
 
         // Act & Assert
         webTestClient.put()
@@ -172,7 +209,8 @@ class ClientControllerIntegrationTest {
         // Act
         webTestClient.delete().uri(BASE_URI_CLIENTS + "/" + FOUND_CLIENT_ID)
                 .exchange()
-                .expectStatus().isNoContent();
+                .expectStatus()
+                .isNoContent();
 
         //Assert
         assertFalse(clientRepository.existsClientByClientIdentifier_ClientId(FOUND_CLIENT_ID));
