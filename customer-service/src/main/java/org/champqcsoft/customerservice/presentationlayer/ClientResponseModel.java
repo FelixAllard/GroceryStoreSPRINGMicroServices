@@ -1,13 +1,11 @@
 package org.champqcsoft.customerservice.presentationlayer;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientResponseModel extends RepresentationModel<ClientResponseModel> {
