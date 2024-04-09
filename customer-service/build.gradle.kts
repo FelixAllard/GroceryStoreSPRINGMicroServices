@@ -2,6 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "3.2.4"
     id("io.spring.dependency-management") version "1.1.4"
+    id("jacoco")
 }
 
 group = "org.champqcsoft"
@@ -49,8 +50,16 @@ dependencies {
     implementation("org.mapstruct:mapstruct:1.4.2.Final")
     implementation("org.springframework.boot:spring-boot-starter-web")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.4.2.Final")
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    testImplementation ("org.jetbrains.kotlin:kotlin-test")
+    testImplementation ("org.jetbrains.kotlin:kotlin-test-junit")
 }
+jacoco {
+    toolVersion = "0.8.11"
+}
+
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
