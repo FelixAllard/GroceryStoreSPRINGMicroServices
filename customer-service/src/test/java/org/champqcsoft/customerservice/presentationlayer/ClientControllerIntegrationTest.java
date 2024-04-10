@@ -67,7 +67,8 @@ class ClientControllerIntegrationTest {
         //arrange
         long sizeDB = clientRepository.count();
 
-        ClientRequestModel clientRequestModel = new ClientRequestModel(FOUND_CLIENT_ID,
+        ClientRequestModel clientRequestModel = new ClientRequestModel(
+                FOUND_CLIENT_ID,
                 "Felix",
                 "xilef992@gmail.com",
                 "5555555555",
