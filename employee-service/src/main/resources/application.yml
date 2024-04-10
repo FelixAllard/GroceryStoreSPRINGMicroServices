@@ -1,7 +1,7 @@
 server:
   error:
     include-message: always
-  port: 7001
+  port: 7002
 logging:
   level:
     root: INFO
@@ -31,6 +31,4 @@ spring:
     init:
       platform: mysql
       mode: always
-
-
 spring.datasource.hikari.initializationFailTimeout: 60000

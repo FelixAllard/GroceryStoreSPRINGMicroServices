@@ -112,17 +112,34 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-
-
-  phpmyadmin:
+  phpmyadmin1:
     image: phpmyadmin:5.2.0
-    container_name: PhpMyAdminProduct
+    container_name: PhpMyAdminCustomer
     links:
       - mysql1
-      - mysql2
-      - mysql3
     restart: always
     ports:
       - 5013:80
+    environment:
+      - PMA_ARBITRARY=1
+  phpmyadmin2:
+    image: phpmyadmin:5.2.0
+    container_name: PhpMyAdminEmployee
+    links:
+      - mysql2
+
+    restart: always
+    ports:
+      - 5014:80
+    environment:
+      - PMA_ARBITRARY=1
+  phpmyadmin3:
+    image: phpmyadmin:5.2.0
+    container_name: PhpMyAdminProduct
+    links:
+      - mysql3
+    restart: always
+    ports:
+      - 5015:80
     environment:
       - PMA_ARBITRARY=1

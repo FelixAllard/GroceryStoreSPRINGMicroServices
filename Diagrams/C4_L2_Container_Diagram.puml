@@ -24,7 +24,7 @@ System_Boundary(weddingplanner, "Grocery Store System") {
     Container(webapp, "Web Application", "JavaScript, React", "Show the information of the grocery store in single page application")
     Container(singlepage_app, "Single-Page Application", "Javascript, React", "You can access the application through your browser as long as it supports later version javascript")
     Container(api_gateway, "API-Gateway", "Java, Spring Boot", "Provides grocery store functionality via a JSON/REST HTTPS API.")
-    Container(wedding_service, "Transaction services", "Java, Spring Boot", "Provides wedding functionality using the aggregator pattern via a JSON/REST HTTPS API.", $tags = "microService")
+    Container(wedding_service, "", "Java, Spring Boot", "Provides wedding functionality using the aggregator pattern via a JSON/REST HTTPS API.", $tags = "microService")
     Container(wives_service, "wives-service", "Java, Spring Boot", "Provides wives functionality via a JSON/REST HTTPS API.", $tags = "microService")
     Container(husbands_service, "husbands-service", "Java, Spring Boot", "Provides husbands functionality via a JSON/REST HTTPS API.", $tags = "microService")
     Container(accessory_service, "accessory-service", "Java, Spring Boot", "Provides accessory functionality via a JSON/REST HTTPS API.", $tags = "microService")

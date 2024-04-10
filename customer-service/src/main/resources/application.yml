@@ -1,7 +1,7 @@
 server:
     error:
         include-message: always
-    port: 7002
+    port: 7001
 logging:
     level:
         root: INFO
