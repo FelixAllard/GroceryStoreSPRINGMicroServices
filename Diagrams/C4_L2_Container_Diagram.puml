@@ -1,0 +1,63 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+
+!include FONTAWESOME/users.puml
+
+AddElementTag("microService", $shape=EightSidedShape(), $bgColor="CornflowerBlue", $fontColor="white", $legendText="micro service\neight sided")
+AddElementTag("unusedMicroService", $shape=EightSidedShape(), $bgColor="grey", $fontColor="white", $legendText="micro service\neight sided")
+AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="lightSkyBlue", $fontColor="white")
+AddElementTag("unusedStorage", $shape=RoundedBoxShape(), $bgColor="grey", $fontColor="white")
+AddRelTag(aggregate_root, $lineColor="red")
+
+LAYOUT_TOP_DOWN()
+'LAYOUT_WITH_LEGEND()
+SHOW_PERSON_OUTLINE()
+'HIDE_STEREOTYPE()
+
+title Container Diagram for Grocery Store System
+
+Person(employee, "Employee", "Wedding planner")
+System_Boundary(weddingplanner, "Grocery Store System") {
+    Container(webapp, "Web Application", "JavaScript, React", "Show the information of the grocery store in single page application")
+    Container(singlepage_app, "Single-Page Application", "Javascript, React", "You can access the application through your browser as long as it supports later version javascript")
+    Container(api_gateway, "API-Gateway", "Java, Spring Boot", "Provides grocery store functionality via a JSON/REST HTTPS API.")
+    Container(wedding_service, "Transaction services", "Java, Spring Boot", "Provides wedding functionality using the aggregator pattern via a JSON/REST HTTPS API.", $tags = "microService")
+    Container(wives_service, "wives-service", "Java, Spring Boot", "Provides wives functionality via a JSON/REST HTTPS API.", $tags = "microService")
+    Container(husbands_service, "husbands-service", "Java, Spring Boot", "Provides husbands functionality via a JSON/REST HTTPS API.", $tags = "microService")
+    Container(accessory_service, "accessory-service", "Java, Spring Boot", "Provides accessory functionality via a JSON/REST HTTPS API.", $tags = "microService")
+    Container(wedding_db, "Wedding DB", "MySQL 5.5.x", "Stores wedding information.", $tags = "storage")
+    Container(wives_db, "Wives DB", "MySQL 5.5.x", "Stores wives information.", $tags = "storage")
+    Container(husbands_db, "Husbands DB", "MySQL 5.5.x", "Stores husbands information.", $tags = "storage")
+    Container(accessory_db, "Accessory DB", "Postgres latest version", "Stores accessory information.", $tags = "storage")
+
+    Container(payment, "payment-service", "Java, Spring Boot", "Provides payment functionality via a JSON/REST HTTPS API.", $tags = "unusedMicroService")
+    Container(payment_db, "Payment DB", "Postgres latest version", "Stores accessory information.", $tags = "unusedStorage")
+
+
+    Rel(employee, webapp, "Visits http://IPADDRESS:8080 using", "HTTP")
+    Rel_R(webapp, singlepage_app, "Show the page on the employee's browser")
+    Rel(employee, singlepage_app, "views tracks wedding using", "HTTPS")
+    Rel(singlepage_app, api_gateway, "Makes API calls to", "JSON/REST/HTTPS")
+    Rel(api_gateway, wives_service, "Makes API calls to", "JSON/REST/HTTPS")
+    Rel(api_gateway, accessory_service, "Makes API calls to", "JSON/REST/HTTPS")
+    Rel(api_gateway, husbands_service, "Makes API calls to", "JSON/REST/HTTPS")
+    Rel(api_gateway, wedding_service, "Makes API calls to", "JSON/REST/HTTPS")
+    Rel(husbands_service, wives_service, "Makes API calls to", "JSON/REST/HTTPS")
+    Rel(wives_service, husbands_service, "Makes API calls to", "JSON/REST/HTTPS")
+    Rel(husbands_service, accessory_service, "Makes API calls to", "JSON/REST/HTTPS")
+    Rel(wives_service, accessory_service, "Makes API calls to", "JSON/REST/HTTPS")
+    Rel(wedding_service, wives_service, "Makes API calls to", "JSON/REST/HTTPS", $tags = "aggregate_root")
+    Rel(wedding_service, husbands_service, "Makes API calls to", "JSON/REST/HTTPS", $tags = "aggregate_root")
+    Rel(wedding_service, accessory_service, "Makes API calls to", "JSON/REST/HTTPS", $tags = "aggregate_root")
+    Rel_D(wives_service, wives_db, "Reads from and writes to", "JDBC")
+    Rel_D(accessory_service, accessory_db, "Reads from and writes to", "JDBC")
+    Rel_D(husbands_service, husbands_db, "Reads from and writes to", "JDBC")
+    Rel_R(wedding_service, wedding_db, "Reads from and writes to", "JDBC", $tags = "aggregate_root")
+    Rel(payment, payment_db, "Read from and writes to", "JDBC")
+    Rel(payment, wedding_service, "Makes API calls to", "JSON/REST/HTTPS")
+   }
+
+@enduml
